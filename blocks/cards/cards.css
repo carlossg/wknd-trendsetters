@@ -9,19 +9,47 @@
 
 .cards > ul > li {
   border: 1px solid #dadada;
+  border-radius: 12px;
   background-color: var(--background-color);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cards > ul > li:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
 }
 
 .cards .cards-card-body {
   margin: 16px;
 }
 
+.cards .cards-card-body h3 {
+  font-size: var(--heading-font-size-xs);
+}
+
 .cards .cards-card-image {
   line-height: 0;
+  overflow: hidden;
 }
 
 .cards > ul > li img {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.cards > ul > li:hover img {
+  transform: scale(1.05);
+}
+
+/* no-images variant */
+.cards.no-images > ul > li {
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.cards.no-images .cards-card-body {
+  margin: 0;
 }
