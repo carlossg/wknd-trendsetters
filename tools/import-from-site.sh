@@ -39,11 +39,10 @@ upload_file() {
 
   echo "  Uploading: $remote_path"
   local status
-  status=$(curl -sf -o /dev/null -w "%{http_code}" \
+  status=$(curl -s -o /dev/null -w "%{http_code}" \
     -X PUT \
     -H "$AUTH_HEADER" \
-    -H "Content-Type: $content_type" \
-    --data-binary "@$local_path" \
+    -F "data=@$local_path;type=$content_type" \
     "$API_BASE/source/$TARGET_ORG/$TARGET_REPO$remote_path") || status="failed"
 
   if [[ "$status" == 2* ]]; then
@@ -121,6 +120,9 @@ done
 echo ""
 echo "=== Step 2: Importing content pages ==="
 
+# Image base URL - use absolute URLs so AEM can resolve them
+IMG="https://wknd-trendsetters.site/images"
+
 # --- nav.html ---
 cat > "$TMP_DIR/nav.html" << 'NAVEOF'
 <body>
@@ -197,9 +199,9 @@ cat > "$TMP_DIR/index.html" << 'INDEXEOF'
   <div>
     <div>
       <div>
-        <p><picture><img src="/images/hero-hiphop-dance.avif" alt="Hero background"></picture></p>
-        <p><picture><img src="/images/hero-family-vacation.avif" alt="Hero background"></picture></p>
-        <p><picture><img src="/images/hero-music-concert.avif" alt="Hero background"></picture></p>
+        <p><picture><img src="https://wknd-trendsetters.site/images/hero-hiphop-dance.avif" alt="Hero background"></picture></p>
+        <p><picture><img src="https://wknd-trendsetters.site/images/hero-family-vacation.avif" alt="Hero background"></picture></p>
+        <p><picture><img src="https://wknd-trendsetters.site/images/hero-music-concert.avif" alt="Hero background"></picture></p>
       </div>
       <div>
         <h1>Fresh looks, bold stories, real life</h1>
@@ -217,7 +219,7 @@ cat > "$TMP_DIR/index.html" << 'INDEXEOF'
     <div class="cards">
       <div>
         <div>
-          <picture><img src="/images/hero-hiphop-dance.avif" alt="Tennis style"></picture>
+          <picture><img src="https://wknd-trendsetters.site/images/hero-hiphop-dance.avif" alt="Tennis style"></picture>
         </div>
         <div>
           <p>Casual Cool · May 12</p>
@@ -226,7 +228,7 @@ cat > "$TMP_DIR/index.html" << 'INDEXEOF'
       </div>
       <div>
         <div>
-          <picture><img src="/images/fundraising-event.avif" alt="Beach vibes"></picture>
+          <picture><img src="https://wknd-trendsetters.site/images/fundraising-event.avif" alt="Beach vibes"></picture>
         </div>
         <div>
           <p>Beach Vibes · May 10</p>
@@ -235,7 +237,7 @@ cat > "$TMP_DIR/index.html" << 'INDEXEOF'
       </div>
       <div>
         <div>
-          <picture><img src="/images/hero-family-vacation.avif" alt="Party fits"></picture>
+          <picture><img src="https://wknd-trendsetters.site/images/hero-family-vacation.avif" alt="Party fits"></picture>
         </div>
         <div>
           <p>Night Out · May 8</p>
@@ -244,7 +246,7 @@ cat > "$TMP_DIR/index.html" << 'INDEXEOF'
       </div>
       <div>
         <div>
-          <picture><img src="/images/mobile-game-character.avif" alt="Sport mode"></picture>
+          <picture><img src="https://wknd-trendsetters.site/images/mobile-game-character.avif" alt="Sport mode"></picture>
         </div>
         <div>
           <p>Sport Mode · May 5</p>
@@ -261,10 +263,10 @@ cat > "$TMP_DIR/index.html" << 'INDEXEOF'
         <div>
           <div class="columns">
             <div>
-              <div><picture><img src="/images/hero-hiphop-dance.avif" alt="Alex Rivera style"></picture></div>
+              <div><picture><img src="https://wknd-trendsetters.site/images/hero-hiphop-dance.avif" alt="Alex Rivera style"></picture></div>
               <div>
                 <p>"Wearing new brands makes every day feel like a runway. I love mixing sporty vibes with bold colors—perfect for tennis or a night out!"</p>
-                <p><picture><img src="/images/avatar-alex.avif" alt="Alex Rivera" width="60" height="60"></picture></p>
+                <p><picture><img src="https://wknd-trendsetters.site/images/avatar-alex.avif" alt="Alex Rivera" width="60" height="60"></picture></p>
                 <p><strong>Alex Rivera</strong></p>
                 <p>Streetwear Enthusiast</p>
               </div>
@@ -277,10 +279,10 @@ cat > "$TMP_DIR/index.html" << 'INDEXEOF'
         <div>
           <div class="columns">
             <div>
-              <div><picture><img src="/images/tab-campus.avif" alt="Taylor Kim style"></picture></div>
+              <div><picture><img src="https://wknd-trendsetters.site/images/tab-campus.avif" alt="Taylor Kim style"></picture></div>
               <div>
                 <p>"Fresh looks, comfy fits—my go-to for beach days and city strolls. These brands keep my style on point and effortless."</p>
-                <p><picture><img src="/images/avatar-taylor.avif" alt="Taylor Kim" width="60" height="60"></picture></p>
+                <p><picture><img src="https://wknd-trendsetters.site/images/avatar-taylor.avif" alt="Taylor Kim" width="60" height="60"></picture></p>
                 <p><strong>Taylor Kim</strong></p>
                 <p>Casual Style Blogger</p>
               </div>
@@ -293,10 +295,10 @@ cat > "$TMP_DIR/index.html" << 'INDEXEOF'
         <div>
           <div class="columns">
             <div>
-              <div><picture><img src="/images/tab-staff.avif" alt="Jordan Ellis style"></picture></div>
+              <div><picture><img src="https://wknd-trendsetters.site/images/tab-staff.avif" alt="Jordan Ellis style"></picture></div>
               <div>
                 <p>"Nothing beats the confidence boost from a killer outfit. I'm always ready for spontaneous adventures in these cool threads."</p>
-                <p><picture><img src="/images/avatar-jordan.avif" alt="Jordan Ellis" width="60" height="60"></picture></p>
+                <p><picture><img src="https://wknd-trendsetters.site/images/avatar-jordan.avif" alt="Jordan Ellis" width="60" height="60"></picture></p>
                 <p><strong>Jordan Ellis</strong></p>
                 <p>Trend Spotter</p>
               </div>
@@ -309,10 +311,10 @@ cat > "$TMP_DIR/index.html" << 'INDEXEOF'
         <div>
           <div class="columns">
             <div>
-              <div><picture><img src="/images/mobile-game-character.avif" alt="Morgan Blake style"></picture></div>
+              <div><picture><img src="https://wknd-trendsetters.site/images/mobile-game-character.avif" alt="Morgan Blake style"></picture></div>
               <div>
                 <p>"From rooftop parties to late-night hangs, these styles turn heads. Fashion should be fun, and this is pure fun!"</p>
-                <p><picture><img src="/images/avatar-morgan.avif" alt="Morgan Blake" width="60" height="60"></picture></p>
+                <p><picture><img src="https://wknd-trendsetters.site/images/avatar-morgan.avif" alt="Morgan Blake" width="60" height="60"></picture></p>
                 <p><strong>Morgan Blake</strong></p>
                 <p>Party Scene Curator</p>
               </div>
@@ -353,7 +355,7 @@ cat > "$TMP_DIR/index.html" << 'INDEXEOF'
   <div>
     <div class="columns">
       <div>
-        <div><picture><img src="/images/networking-event.avif" alt="CTA image"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/networking-event.avif" alt="CTA image"></picture></div>
         <div>
           <h2>Fresh looks, bold stories, real life</h2>
           <p>Dive into our latest case study: see how young trendsetters rock new brands from courtside to the dance floor. Discover the style, the vibe, and the impact—one story at a time.</p>
@@ -373,7 +375,7 @@ cat > "$TMP_DIR/fashion-insights.html" << 'FIEOF'
 <header>
   <div>
     <div>
-      <div><picture><img src="/images/fashion-insights-hero.avif" alt="Fashion insights hero"></picture></div>
+      <div><picture><img src="https://wknd-trendsetters.site/images/fashion-insights-hero.avif" alt="Fashion insights hero"></picture></div>
       <div>
         <h1>WKND Trendsetters Blog</h1>
         <p>From tennis courts to neon nights, discover the latest trends, style inspo, and stories from the coolest scenes. Dive into a world where fashion meets fun—your next look starts here.</p>
@@ -387,7 +389,7 @@ cat > "$TMP_DIR/fashion-insights.html" << 'FIEOF'
   <div>
     <div class="columns">
       <div>
-        <div><picture><img src="/images/adventure-spots.avif" alt="Featured article"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/adventure-spots.avif" alt="Featured article"></picture></div>
         <div>
           <p>Featured</p>
           <h2>Fresh looks, bold moves</h2>
@@ -403,28 +405,28 @@ cat > "$TMP_DIR/fashion-insights.html" << 'FIEOF'
     <p>Fresh looks, bold moves</p>
     <div class="cards">
       <div>
-        <div><picture><img src="/images/hero-hiphop-dance.avif" alt="Tennis style"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/hero-hiphop-dance.avif" alt="Tennis style"></picture></div>
         <div>
           <p>Casual Cool · May 12</p>
           <h3><a href="/blog/latest-trends-young-casual-fashion">Tennis style, redefined</a></h3>
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/fundraising-event.avif" alt="Beach vibes"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/fundraising-event.avif" alt="Beach vibes"></picture></div>
         <div>
           <p>Beach Vibes · May 10</p>
           <h3><a href="/blog/fashion-trends-young-culture">Sunkissed and effortless</a></h3>
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/hero-family-vacation.avif" alt="Night out"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/hero-family-vacation.avif" alt="Night out"></picture></div>
         <div>
           <p>Night Out · May 8</p>
           <h3><a href="/blog/fashion-trends-young-style">Party fits that pop</a></h3>
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/mobile-game-character.avif" alt="Sport mode"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/mobile-game-character.avif" alt="Sport mode"></picture></div>
         <div>
           <p>Sport Mode · May 5</p>
           <h3><a href="/blog/fashion-blog-post">Game on, style up</a></h3>
@@ -438,14 +440,14 @@ cat > "$TMP_DIR/fashion-insights.html" << 'FIEOF'
     <p>Peek the latest looks in action</p>
     <div class="columns">
       <div>
-        <div><picture><img src="/images/gallery-3.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/gallery-4.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/gallery-1.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/gallery-3.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/gallery-4.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/gallery-1.avif" alt="Gallery"></picture></div>
       </div>
       <div>
-        <div><picture><img src="/images/gallery-2.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/adventure-spots.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/gallery-6.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/gallery-2.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/adventure-spots.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/gallery-6.avif" alt="Gallery"></picture></div>
       </div>
     </div>
   </div>
@@ -470,8 +472,8 @@ cat > "$TMP_DIR/fashion-trends-of-the-season.html" << 'FTSEOF'
   <div>
     <div>
       <div>
-        <p><picture><img src="/images/mobile-game-character.avif" alt="Hero"></picture></p>
-        <p><picture><img src="/images/hero-family-vacation.avif" alt="Hero"></picture></p>
+        <p><picture><img src="https://wknd-trendsetters.site/images/mobile-game-character.avif" alt="Hero"></picture></p>
+        <p><picture><img src="https://wknd-trendsetters.site/images/hero-family-vacation.avif" alt="Hero"></picture></p>
       </div>
       <div>
         <h1>Fresh fits, bold moves — Trends for every vibe.</h1>
@@ -486,7 +488,7 @@ cat > "$TMP_DIR/fashion-trends-of-the-season.html" << 'FTSEOF'
   <div>
     <div class="columns">
       <div>
-        <div><picture><img src="/images/season-trend-1.avif" alt="Trend alert"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/season-trend-1.avif" alt="Trend alert"></picture></div>
         <div>
           <h2>Trend alert</h2>
           <h3>Trendy looks, real moments</h3>
@@ -526,14 +528,14 @@ cat > "$TMP_DIR/fashion-trends-of-the-season.html" << 'FTSEOF'
     <p>Peek the latest looks in action</p>
     <div class="columns">
       <div>
-        <div><picture><img src="/images/gallery-3.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/gallery-4.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/gallery-1.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/gallery-3.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/gallery-4.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/gallery-1.avif" alt="Gallery"></picture></div>
       </div>
       <div>
-        <div><picture><img src="/images/gallery-2.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/adventure-spots.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/gallery-6.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/gallery-2.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/adventure-spots.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/gallery-6.avif" alt="Gallery"></picture></div>
       </div>
     </div>
   </div>
@@ -558,8 +560,8 @@ cat > "$TMP_DIR/fashion-trends-young-adults-casual-sport.html" << 'FTCSEOF'
   <div>
     <div>
       <div>
-        <p><picture><img src="/images/mobile-game-character.avif" alt="Hero"></picture></p>
-        <p><picture><img src="/images/customer-headshot.avif" alt="Hero"></picture></p>
+        <p><picture><img src="https://wknd-trendsetters.site/images/mobile-game-character.avif" alt="Hero"></picture></p>
+        <p><picture><img src="https://wknd-trendsetters.site/images/customer-headshot.avif" alt="Hero"></picture></p>
       </div>
       <div>
         <h1>Fresh fits, bold moves, all you</h1>
@@ -575,7 +577,7 @@ cat > "$TMP_DIR/fashion-trends-young-adults-casual-sport.html" << 'FTCSEOF'
     <p>Fresh fits, bold moves</p>
     <div class="cards">
       <div>
-        <div><picture><img src="/images/hero-hiphop-dance.avif" alt="Tennis looks"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/hero-hiphop-dance.avif" alt="Tennis looks"></picture></div>
         <div>
           <p>Casual</p>
           <h3><a href="/fashion-trends-young-adults">Tennis looks that serve</a></h3>
@@ -583,7 +585,7 @@ cat > "$TMP_DIR/fashion-trends-young-adults-casual-sport.html" << 'FTCSEOF'
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/hero-music-concert.avif" alt="Beach style"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/hero-music-concert.avif" alt="Beach style"></picture></div>
         <div>
           <p>Beach</p>
           <h3><a href="/fashion-trends-young-adults">Sunkissed & effortless</a></h3>
@@ -591,7 +593,7 @@ cat > "$TMP_DIR/fashion-trends-young-adults-casual-sport.html" << 'FTCSEOF'
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/celebrities-events.avif" alt="Nightlife"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/celebrities-events.avif" alt="Nightlife"></picture></div>
         <div>
           <p>Nightlife</p>
           <h3><a href="/fashion-trends-young-adults">Party after dark</a></h3>
@@ -599,7 +601,7 @@ cat > "$TMP_DIR/fashion-trends-young-adults-casual-sport.html" << 'FTCSEOF'
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/networking-event.avif" alt="Street style"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/networking-event.avif" alt="Street style"></picture></div>
         <div>
           <p>Street</p>
           <h3><a href="/fashion-trends-young-adults">City strolls, cool fits</a></h3>
@@ -607,7 +609,7 @@ cat > "$TMP_DIR/fashion-trends-young-adults-casual-sport.html" << 'FTCSEOF'
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/trending-outfits.avif" alt="Sport style"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/trending-outfits.avif" alt="Sport style"></picture></div>
         <div>
           <p>Sport</p>
           <h3><a href="/fashion-trends-young-adults">Move in style</a></h3>
@@ -615,7 +617,7 @@ cat > "$TMP_DIR/fashion-trends-young-adults-casual-sport.html" << 'FTCSEOF'
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/successful-events.avif" alt="Festival style"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/successful-events.avif" alt="Festival style"></picture></div>
         <div>
           <p>Festival</p>
           <h3><a href="/fashion-trends-young-adults">Vibes for days</a></h3>
@@ -623,7 +625,7 @@ cat > "$TMP_DIR/fashion-trends-young-adults-casual-sport.html" << 'FTCSEOF'
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/shopping-bag.avif" alt="Chill style"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/shopping-bag.avif" alt="Chill style"></picture></div>
         <div>
           <p>Chill</p>
           <h3><a href="/fashion-trends-young-adults">Laid-back, always cool</a></h3>
@@ -631,7 +633,7 @@ cat > "$TMP_DIR/fashion-trends-young-adults-casual-sport.html" << 'FTCSEOF'
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/people-coffee.avif" alt="Retro style"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/people-coffee.avif" alt="Retro style"></picture></div>
         <div>
           <p>Retro</p>
           <h3><a href="/fashion-trends-young-adults">Throwback energy</a></h3>
@@ -647,7 +649,7 @@ cat > "$TMP_DIR/fashion-trends-young-adults-casual-sport.html" << 'FTCSEOF'
   <div>
     <div class="columns">
       <div>
-        <div><picture><img src="/images/bustling-pub.avif" alt="Fresh fits"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/bustling-pub.avif" alt="Fresh fits"></picture></div>
         <div>
           <h2>Fresh fits, bold moves</h2>
           <p>Dive into the latest street style, sporty looks, and party-ready outfits.</p>
@@ -677,9 +679,9 @@ cat > "$TMP_DIR/fashion-trends-young-adults.html" << 'FTAEOF'
   <div>
     <div>
       <div>
-        <p><picture><img src="/images/cycling-event.avif" alt="Hero"></picture></p>
-        <p><picture><img src="/images/hero-music-concert.avif" alt="Hero"></picture></p>
-        <p><picture><img src="/images/party-vacation.avif" alt="Hero"></picture></p>
+        <p><picture><img src="https://wknd-trendsetters.site/images/cycling-event.avif" alt="Hero"></picture></p>
+        <p><picture><img src="https://wknd-trendsetters.site/images/hero-music-concert.avif" alt="Hero"></picture></p>
+        <p><picture><img src="https://wknd-trendsetters.site/images/party-vacation.avif" alt="Hero"></picture></p>
       </div>
       <div>
         <h1>Fresh fits, bold moves. Style that never sleeps</h1>
@@ -694,7 +696,7 @@ cat > "$TMP_DIR/fashion-trends-young-adults.html" << 'FTAEOF'
   <div>
     <div class="columns">
       <div>
-        <div><picture><img src="/images/casual-trend.avif" alt="Tennis looks"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/casual-trend.avif" alt="Tennis looks"></picture></div>
         <div>
           <h2>Tennis looks, game strong</h2>
           <p>Crisp polos, bold sneakers, and clean lines—tennis fashion is serving up style that works on the court and on the streets.</p>
@@ -710,7 +712,7 @@ cat > "$TMP_DIR/fashion-trends-young-adults.html" << 'FTAEOF'
           <h2>Beach vibes, sun-kissed style</h2>
           <p>Breezy linen, bucket hats, and sandals—beach fashion is all about effortless cool that takes you from sand to sidewalk.</p>
         </div>
-        <div><picture><img src="/images/beach-destination.avif" alt="Beach vibes"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/beach-destination.avif" alt="Beach vibes"></picture></div>
       </div>
     </div>
   </div>
@@ -718,7 +720,7 @@ cat > "$TMP_DIR/fashion-trends-young-adults.html" << 'FTAEOF'
   <div>
     <div class="columns">
       <div>
-        <div><picture><img src="/images/party-accessories.avif" alt="Party nights"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/party-accessories.avif" alt="Party nights"></picture></div>
         <div>
           <h2>Party nights, trend on</h2>
           <p>Neon accents, metallics, and statement jackets—night out fashion is about owning the spotlight and having the time of your life.</p>
@@ -736,28 +738,28 @@ cat > "$TMP_DIR/fashion-trends-young-adults.html" << 'FTAEOF'
     <h2>Trends for every vibe</h2>
     <div class="cards">
       <div>
-        <div><picture><img src="/images/casual-trend.avif" alt="Tennis"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/casual-trend.avif" alt="Tennis"></picture></div>
         <div>
           <p>Casual · May 12</p>
           <h3><a href="/blog/latest-trends-young-casual-fashion">Tennis looks that serve</a></h3>
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/beach-destination.avif" alt="Sporty"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/beach-destination.avif" alt="Sporty"></picture></div>
         <div>
           <p>Sporty · May 10</p>
           <h3><a href="/blog/fashion-trends-young-culture">Streetwear on the move</a></h3>
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/networking-event.avif" alt="Beach"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/networking-event.avif" alt="Beach"></picture></div>
         <div>
           <p>Beach · May 8</p>
           <h3><a href="/blog/fashion-trends-young-style">Sunkissed & styled</a></h3>
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/party-accessories.avif" alt="Party"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/party-accessories.avif" alt="Party"></picture></div>
         <div>
           <p>Party · May 5</p>
           <h3><a href="/blog/fashion-blog-post">Night out, bold fits</a></h3>
@@ -771,12 +773,12 @@ cat > "$TMP_DIR/fashion-trends-young-adults.html" << 'FTAEOF'
     <p>Trendy looks, real moments</p>
     <div class="columns">
       <div>
-        <div><picture><img src="/images/game-characters.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/gallery-2.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/game-characters.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/gallery-2.avif" alt="Gallery"></picture></div>
       </div>
       <div>
-        <div><picture><img src="/images/concert-crowd.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/hero-hiphop-dance.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/concert-crowd.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/hero-hiphop-dance.avif" alt="Gallery"></picture></div>
       </div>
     </div>
   </div>
@@ -800,7 +802,7 @@ cat > "$TMP_DIR/case-studies.html" << 'CSEOF'
 <header>
   <div>
     <div>
-      <div><picture><img src="/images/adventure-spots.avif" alt="Case studies hero"></picture></div>
+      <div><picture><img src="https://wknd-trendsetters.site/images/adventure-spots.avif" alt="Case studies hero"></picture></div>
       <div>
         <h1>Fresh looks, bold stories, real life</h1>
         <p>Dive into our latest style adventures—see how young trendsetters own every moment, from courtside to the dance floor.</p>
@@ -820,16 +822,16 @@ cat > "$TMP_DIR/case-studies.html" << 'CSEOF'
     <p>Peek the latest looks in action</p>
     <div class="columns">
       <div>
-        <div><picture><img src="/images/hero-hiphop-dance.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/beach-destination.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/concert-crowd.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/campus-life.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/hero-hiphop-dance.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/beach-destination.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/concert-crowd.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/campus-life.avif" alt="Gallery"></picture></div>
       </div>
       <div>
-        <div><picture><img src="/images/gaming-tournaments.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/mobile-game-character.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/fashion-inspiration.avif" alt="Gallery"></picture></div>
-        <div><picture><img src="/images/campus-tour.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/gaming-tournaments.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/mobile-game-character.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/fashion-inspiration.avif" alt="Gallery"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/campus-tour.avif" alt="Gallery"></picture></div>
       </div>
     </div>
   </div>
@@ -841,10 +843,10 @@ cat > "$TMP_DIR/case-studies.html" << 'CSEOF'
         <div>
           <div class="columns">
             <div>
-              <div><picture><img src="/images/hero-hiphop-dance.avif" alt="Alex Rivera"></picture></div>
+              <div><picture><img src="https://wknd-trendsetters.site/images/hero-hiphop-dance.avif" alt="Alex Rivera"></picture></div>
               <div>
                 <p>"Wearing new brands makes every day feel like a runway. I love mixing sporty vibes with bold colors—perfect for tennis or a night out!"</p>
-                <p><picture><img src="/images/avatar-alex.avif" alt="Alex Rivera" width="60" height="60"></picture></p>
+                <p><picture><img src="https://wknd-trendsetters.site/images/avatar-alex.avif" alt="Alex Rivera" width="60" height="60"></picture></p>
                 <p><strong>Alex Rivera</strong></p>
                 <p>Streetwear Enthusiast</p>
               </div>
@@ -857,10 +859,10 @@ cat > "$TMP_DIR/case-studies.html" << 'CSEOF'
         <div>
           <div class="columns">
             <div>
-              <div><picture><img src="/images/tab-campus.avif" alt="Taylor Kim"></picture></div>
+              <div><picture><img src="https://wknd-trendsetters.site/images/tab-campus.avif" alt="Taylor Kim"></picture></div>
               <div>
                 <p>"Fresh looks, comfy fits—my go-to for beach days and city strolls. These brands keep my style on point and effortless."</p>
-                <p><picture><img src="/images/avatar-taylor.avif" alt="Taylor Kim" width="60" height="60"></picture></p>
+                <p><picture><img src="https://wknd-trendsetters.site/images/avatar-taylor.avif" alt="Taylor Kim" width="60" height="60"></picture></p>
                 <p><strong>Taylor Kim</strong></p>
                 <p>Casual Style Blogger</p>
               </div>
@@ -873,10 +875,10 @@ cat > "$TMP_DIR/case-studies.html" << 'CSEOF'
         <div>
           <div class="columns">
             <div>
-              <div><picture><img src="/images/tab-staff.avif" alt="Jordan Ellis"></picture></div>
+              <div><picture><img src="https://wknd-trendsetters.site/images/tab-staff.avif" alt="Jordan Ellis"></picture></div>
               <div>
                 <p>"Nothing beats the confidence boost from a killer outfit. I'm always ready for spontaneous adventures in these cool threads."</p>
-                <p><picture><img src="/images/avatar-jordan.avif" alt="Jordan Ellis" width="60" height="60"></picture></p>
+                <p><picture><img src="https://wknd-trendsetters.site/images/avatar-jordan.avif" alt="Jordan Ellis" width="60" height="60"></picture></p>
                 <p><strong>Jordan Ellis</strong></p>
                 <p>Trend Spotter</p>
               </div>
@@ -889,10 +891,10 @@ cat > "$TMP_DIR/case-studies.html" << 'CSEOF'
         <div>
           <div class="columns">
             <div>
-              <div><picture><img src="/images/mobile-game-character.avif" alt="Morgan Blake"></picture></div>
+              <div><picture><img src="https://wknd-trendsetters.site/images/mobile-game-character.avif" alt="Morgan Blake"></picture></div>
               <div>
                 <p>"From rooftop parties to late-night hangs, these styles turn heads. Fashion should be fun, and this is pure fun!"</p>
-                <p><picture><img src="/images/avatar-morgan.avif" alt="Morgan Blake" width="60" height="60"></picture></p>
+                <p><picture><img src="https://wknd-trendsetters.site/images/avatar-morgan.avif" alt="Morgan Blake" width="60" height="60"></picture></p>
                 <p><strong>Morgan Blake</strong></p>
                 <p>Party Scene Curator</p>
               </div>
@@ -906,7 +908,7 @@ cat > "$TMP_DIR/case-studies.html" << 'CSEOF'
   <div>
     <div class="columns">
       <div>
-        <div><picture><img src="/images/networking-event.avif" alt="CTA"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/networking-event.avif" alt="CTA"></picture></div>
         <div>
           <h2>Fresh looks, bold stories, real life</h2>
           <p>Dive into our latest case study: see how young trendsetters rock new brands from courtside to the dance floor. Discover the style, the vibe, and the impact—one story at a time.</p>
@@ -926,7 +928,7 @@ cat > "$TMP_DIR/faq.html" << 'FAQEOF'
 <header>
   <div>
     <div>
-      <div><picture><img src="/images/faq-hero.avif" alt="FAQ hero"></picture></div>
+      <div><picture><img src="https://wknd-trendsetters.site/images/faq-hero.avif" alt="FAQ hero"></picture></div>
       <div>
         <h1>Got questions? We've got answers.</h1>
         <p>Fashion FAQs, answered fast</p>
@@ -988,7 +990,7 @@ cat > "$TMP_DIR/blog-index.html" << 'BLOGEOF'
 <header>
   <div>
     <div>
-      <div><picture><img src="/images/fashion-insights-hero.avif" alt="Blog hero"></picture></div>
+      <div><picture><img src="https://wknd-trendsetters.site/images/fashion-insights-hero.avif" alt="Blog hero"></picture></div>
       <div>
         <h1>WKND Trendsetters Blog</h1>
         <p>From tennis courts to neon nights, discover the latest trends, style inspo, and stories from the coolest scenes. Dive into a world where fashion meets fun—your next look starts here.</p>
@@ -1002,7 +1004,7 @@ cat > "$TMP_DIR/blog-index.html" << 'BLOGEOF'
   <div>
     <div class="columns">
       <div>
-        <div><picture><img src="/images/ace-polo-court-style.avif" alt="Featured article"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/ace-polo-court-style.avif" alt="Featured article"></picture></div>
         <div>
           <p>Featured · February 23, 2026</p>
           <h2>Court cool, street ready — the Ace Pro polo</h2>
@@ -1017,42 +1019,42 @@ cat > "$TMP_DIR/blog-index.html" << 'BLOGEOF'
     <h2>Latest Articles</h2>
     <div class="cards">
       <div>
-        <div><picture><img src="/images/flip-flop-beach-style.avif" alt="Flip flop style"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/flip-flop-beach-style.avif" alt="Flip flop style"></picture></div>
         <div>
           <p>Beach Vibes · Feb 22, 2026</p>
           <h3><a href="/blog/flip-flop-summer-style">Slide into summer — flip flops that serve</a></h3>
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/hero-hiphop-dance.avif" alt="Tennis style"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/hero-hiphop-dance.avif" alt="Tennis style"></picture></div>
         <div>
           <p>Casual Cool · June 12, 2024</p>
           <h3><a href="/blog/latest-trends-young-casual-fashion">Tennis style, redefined</a></h3>
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/fundraising-event.avif" alt="Beach vibes"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/fundraising-event.avif" alt="Beach vibes"></picture></div>
         <div>
           <p>Beach Vibes · June 10, 2024</p>
           <h3><a href="/blog/fashion-trends-young-culture">Sunkissed and effortless</a></h3>
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/hero-family-vacation.avif" alt="Party fits"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/hero-family-vacation.avif" alt="Party fits"></picture></div>
         <div>
           <p>Night Out · June 8, 2024</p>
           <h3><a href="/blog/fashion-trends-young-style">Party fits that pop</a></h3>
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/mobile-game-character.avif" alt="Sport mode"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/mobile-game-character.avif" alt="Sport mode"></picture></div>
         <div>
           <p>Sport Mode · June 5, 2024</p>
           <h3><a href="/blog/fashion-blog-post">Game on, style up</a></h3>
         </div>
       </div>
       <div>
-        <div><picture><img src="/images/street-style.avif" alt="Street style"></picture></div>
+        <div><picture><img src="https://wknd-trendsetters.site/images/street-style.avif" alt="Street style"></picture></div>
         <div>
           <p>Street Style · June 2, 2024</p>
           <h3><a href="/blog/street-style-trends">Street style, your way</a></h3>
@@ -1081,7 +1083,7 @@ cat > "$TMP_DIR/blog-casual.html" << 'B1EOF'
 <header>
   <div>
     <div>
-      <div><picture><img src="/images/hero-hiphop-dance.avif" alt="Tennis style hero"></picture></div>
+      <div><picture><img src="https://wknd-trendsetters.site/images/hero-hiphop-dance.avif" alt="Tennis style hero"></picture></div>
       <div>
         <h1>Tennis style, redefined</h1>
       </div>
@@ -1120,7 +1122,7 @@ cat > "$TMP_DIR/blog-culture.html" << 'B2EOF'
 <header>
   <div>
     <div>
-      <div><picture><img src="/images/fundraising-event.avif" alt="Beach vibes hero"></picture></div>
+      <div><picture><img src="https://wknd-trendsetters.site/images/fundraising-event.avif" alt="Beach vibes hero"></picture></div>
       <div>
         <h1>Sunkissed and effortless</h1>
       </div>
@@ -1159,7 +1161,7 @@ cat > "$TMP_DIR/blog-style.html" << 'B3EOF'
 <header>
   <div>
     <div>
-      <div><picture><img src="/images/hero-family-vacation.avif" alt="Party fits hero"></picture></div>
+      <div><picture><img src="https://wknd-trendsetters.site/images/hero-family-vacation.avif" alt="Party fits hero"></picture></div>
       <div>
         <h1>Party fits that pop</h1>
       </div>
@@ -1200,7 +1202,7 @@ cat > "$TMP_DIR/blog-post.html" << 'B4EOF'
 <header>
   <div>
     <div>
-      <div><picture><img src="/images/mobile-game-character.avif" alt="Sport mode hero"></picture></div>
+      <div><picture><img src="https://wknd-trendsetters.site/images/mobile-game-character.avif" alt="Sport mode hero"></picture></div>
       <div>
         <h1>Game on, style up</h1>
       </div>
