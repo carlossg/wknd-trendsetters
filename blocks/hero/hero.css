@@ -1,14 +1,7 @@
+/* === Full-bleed background hero === */
 .hero-container .hero-wrapper {
   max-width: unset;
   padding: 0;
-}
-
-.hero {
-  position: relative;
-  padding: 40px 24px;
-  min-height: 400px;
-  display: flex;
-  align-items: flex-end;
 }
 
 .hero picture {
@@ -50,7 +43,15 @@
   height: 100%;
 }
 
-.hero .hero-content {
+.hero:not(.hero-split) {
+  position: relative;
+  padding: 40px 24px;
+  min-height: 400px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.hero:not(.hero-split) .hero-content {
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
@@ -58,28 +59,112 @@
   color: var(--background-color);
 }
 
-.hero .hero-content h1 {
+.hero:not(.hero-split) .hero-content h1,
+.hero:not(.hero-split) .hero-content h2 {
   color: var(--background-color);
 }
 
-.hero .hero-content p {
+.hero:not(.hero-split) .hero-content p {
   color: var(--background-color);
 }
 
-.hero .hero-content a.button:any-link {
+.hero:not(.hero-split) .hero-content a.button:any-link {
   border-color: var(--background-color);
   color: var(--background-color);
   background-color: transparent;
   box-shadow: 4px 4px 0 0 var(--background-color);
 }
 
-.hero .hero-content a.button:any-link:hover {
+.hero:not(.hero-split) .hero-content a.button:any-link:hover {
   box-shadow: 6px 6px 0 0 var(--background-color);
 }
 
 @media (width >= 900px) {
-  .hero {
+  .hero:not(.hero-split) {
     min-height: 500px;
     padding: 60px 32px;
+  }
+}
+
+/* === Split layout hero (text + image grid) === */
+.hero.hero-split {
+  padding: 40px 24px;
+}
+
+.hero.hero-split > div {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero.hero-split .hero-content {
+  flex: 1;
+}
+
+.hero.hero-split .hero-content h1 {
+  margin-top: 0;
+  font-size: var(--heading-font-size-xxl);
+  line-height: 1.1;
+}
+
+.hero.hero-split .hero-content p {
+  font-size: var(--body-font-size-m);
+  color: var(--dark-color);
+  max-width: 560px;
+}
+
+.hero.hero-split .hero-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.hero.hero-split .hero-images picture {
+  position: static;
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.hero.hero-split .hero-images img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.hero.hero-split .hero-images p {
+  margin: 0;
+}
+
+.hero.hero-split .hero-images p:last-child {
+  grid-column: 1;
+}
+
+@media (width >= 900px) {
+  .hero.hero-split {
+    padding: 60px 32px;
+  }
+
+  .hero.hero-split > div {
+    flex-direction: row;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .hero.hero-split .hero-content {
+    flex: 1 1 50%;
+  }
+
+  .hero.hero-split .hero-content h1 {
+    font-size: 56px;
+  }
+
+  .hero.hero-split .hero-images {
+    flex: 1 1 50%;
+    gap: 16px;
   }
 }

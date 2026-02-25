@@ -5,9 +5,9 @@ footer {
 }
 
 footer .footer > div {
-  margin: auto;
   max-width: 1200px;
-  padding: 40px 24px 24px;
+  margin: auto;
+  padding: 48px 24px 32px;
 }
 
 footer .footer p {
@@ -15,7 +15,8 @@ footer .footer p {
 }
 
 footer .footer a:any-link {
-  color: var(--background-color);
+  color: rgb(255 255 255 / 70%);
+  text-decoration: none;
 }
 
 footer .footer a:hover {
@@ -25,11 +26,41 @@ footer .footer a:hover {
 footer .footer h2,
 footer .footer h3,
 footer .footer h4 {
-  color: var(--background-color);
+  color: rgb(255 255 255 / 90%);
+  font-size: var(--body-font-size-xs);
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+footer .footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+footer .footer ul li {
+  margin-bottom: 12px;
+}
+
+/* multi-section layout */
+footer .footer .section {
+  margin: 0;
+  padding: 0 0 32px;
+}
+
+footer .footer .section > div {
+  padding: 0;
 }
 
 @media (width >= 900px) {
   footer .footer > div {
-    padding: 40px 32px 24px;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding: 48px 32px 32px;
+  }
+
+  footer .footer .section {
+    padding: 0;
   }
 }

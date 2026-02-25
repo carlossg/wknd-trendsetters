@@ -273,3 +273,16 @@ header nav .nav-sections ul > li > ul > li {
 header nav .nav-tools {
   grid-area: tools;
 }
+
+header nav .nav-tools a.button:any-link {
+  border-radius: 24px;
+  box-shadow: none;
+  padding: 0.5em 1.2em;
+  font-size: var(--body-font-size-xs);
+}
+
+header nav .nav-tools a.button:any-link:hover {
+  transform: none;
+  box-shadow: none;
+  opacity: 0.9;
+}
